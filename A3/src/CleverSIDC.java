@@ -36,11 +36,21 @@ public class CleverSIDC {
             return new int[0];
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void add(int key, String value) {
         if(bst != null)
             bst.insert(key, value);
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String remove(int key) {
 
         if(bst != null)
@@ -50,6 +60,11 @@ public class CleverSIDC {
 
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String getValues(int key) {
         if(bst != null)
             return bst.get(key);
@@ -57,15 +72,38 @@ public class CleverSIDC {
             return map.get(key);
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public int nextKey(int key) {
         return 0;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public int prevKey(int key) {
         return 0;
     }
 
+    /**
+     *
+     * @param key1
+     * @param key2
+     * @return
+     */
     public int rangeKey(int key1, int key2) {
         return 0;
+    }
+
+    public int size() {
+        return bst.getSize();
+    }
+    public void empty() {
+        bst.clear();
     }
 }
