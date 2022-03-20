@@ -22,8 +22,8 @@ public class BST {
 
     /**
      * Creates a Node object given a key and value
-     * @param key
-     * @param value
+     * @param key Identifier for an entry
+     * @param value Data associated with the key
      * @return Node ready to use in the BST
      */
     public Node createNode(int key, String value) {
@@ -38,7 +38,7 @@ public class BST {
      * Insert a node into the BST
      * BST insertion chooses one path, left or right, at every node.
      * Complexity: O(h) where h = logn often times, but h = n is possible depending on the data
-     * @param key
+     * @param key Identifier for an entry
      * @param value
      */
     public void insert(int key, String value) {
@@ -101,7 +101,7 @@ public class BST {
      * If node has no children, sever the connection with the parent.
      * If node has 1 child, replace the connection to the parent with the node's child.
      * If node has 2 children, perform inorder traversal to find the smallest number on the right path as a replacement
-     * @param key
+     * @param key Identifier for an entry
      * @return The node being deleted
      */
     public Node delete(int key) {
@@ -197,9 +197,9 @@ public class BST {
     /**
      * Perform inorder traversal recursively
      * Complexity: O(n). Every node must be visited.
-     * @param node
-     * @param sortedEntries
-     * @param index
+     * @param node Initialized as root. Used for traversal
+     * @param sortedEntries Initialized as empty array. Accumulates keys sorted.
+     * @param index Tracks the next available index in the sorted key arrays.
      * @return Index used only within this function. Keeps track of next available index of the sorted array
      */
     public int inorder(Node node, int[] sortedEntries, int index) {
@@ -210,11 +210,18 @@ public class BST {
         return index;
     }
 
+    /**
+     * Clear the tree
+     */
     public void clear() {
         root = null;
         size = 0;
     }
 
+    /**
+     * Returns the current size of the tree
+     * @return Current amount of entries in the BST
+     */
     public int getSize() {
         return size;
     }

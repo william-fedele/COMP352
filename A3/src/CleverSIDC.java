@@ -18,7 +18,7 @@ public class CleverSIDC {
 
     /**
      * Randomly generates new non-existing key of 8 digits
-     * @return
+     * @return Random 8 digit key not already present in the ADT
      */
     public int generate() {
         return 0;
@@ -26,7 +26,7 @@ public class CleverSIDC {
 
     /**
      * Returns all keys in CleverSIDC as a sorted sequence
-     * @return
+     * @return All keys in a sorted array
      */
     public int[] allKeys() {
         if(bst != null)
@@ -38,8 +38,8 @@ public class CleverSIDC {
 
     /**
      *
-     * @param key
-     * @param value
+     * @param key Identifier for an entry
+     * @param value Data associated with the key
      */
     public void add(int key, String value) {
         if(bst != null)
@@ -48,8 +48,8 @@ public class CleverSIDC {
 
     /**
      *
-     * @param key
-     * @return
+     * @param key Identifier for an entry
+     * @return Data associated with the key
      */
     public String remove(int key) {
 
@@ -62,8 +62,8 @@ public class CleverSIDC {
 
     /**
      *
-     * @param key
-     * @return
+     * @param key Identifier for an entry
+     * @return Data associated with the key
      */
     public String getValues(int key) {
         if(bst != null)
@@ -73,33 +73,75 @@ public class CleverSIDC {
     }
 
     /**
-     *
-     * @param key
-     * @return
+     *  Finds the next key in the sorted sequence of keys
+     * @param key Identifier for an entry
+     * @return Next key in sorted sequence
      */
     public int nextKey(int key) {
-        return 0;
+        int[] sortedKeys = bst != null ? bst.inorder() : map.sort();
+        int leftIndex = 0;
+        int rightIndex = sortedKeys.length-1;
+        int midIndex = (leftIndex+rightIndex / 2);
+        while (leftIndex <= rightIndex) {
+            if(key == sortedKeys[midIndex])
+                return sortedKeys[midIndex+1];
+            else if(key < sortedKeys[midIndex])
+                rightIndex = midIndex-1;
+            else
+                leftIndex = midIndex + 1;
+        }
+        return -1;
     }
 
     /**
-     *
-     * @param key
-     * @return
+     * Finds the previous key in the sorted sequence of keys
+     * @param key Identifier for an entry
+     * @return Previous key in sorted sequence
      */
     public int prevKey(int key) {
-        return 0;
+        int[] sortedKeys = bst != null ? bst.inorder() : map.sort();
+        int leftIndex = 0;
+        int rightIndex = sortedKeys.length-1;
+        int midIndex = (leftIndex+rightIndex / 2);
+        while (leftIndex <= rightIndex) {
+            if(key == sortedKeys[midIndex])
+                return sortedKeys[midIndex-1];
+            else if(key < sortedKeys[midIndex])
+                rightIndex = midIndex-1;
+            else
+                leftIndex = midIndex + 1;
+        }
+        return -1;
+    }
+
+    /**
+     * Finds the index distance between two keys
+     * @param key1 First identifier for an entry
+     * @param key2 Second identifier for an entry
+     * @return Distance between the two keys
+     */
+    public int rangeKey(int key1, int key2) {
+        int[] sortedKeys = bst != null ? bst.inorder() : map.sort();
+        int first = -1;
+        int last = -1;
+        for (int i = 0; i < sortedKeys.length; i++) {
+            if(sortedKeys[i] == key1 || sortedKeys[i] == key2) {
+                if(first == -1)
+                    first = i;
+                else
+                    last = i;
+            }
+        }
+        if(first == last)
+            return -1;
+        else
+            return last - first;
     }
 
     /**
      *
-     * @param key1
-     * @param key2
-     * @return
+     * @return Amount of entries currently in the ADT
      */
-    public int rangeKey(int key1, int key2) {
-        return 0;
-    }
-
     public int size() {
         return bst.getSize();
     }

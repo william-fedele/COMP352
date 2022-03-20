@@ -28,4 +28,20 @@ public class Main {
             System.out.println("Failed to open the input file! " + e.getMessage());
         }
     }
+
+    public static void Demo1(CleverSIDC sidc) {
+
+    }
+    public static void Demo2(CleverSIDC sidc) {
+
+    }
+    public static void Demo3(CleverSIDC sidc) {
+
+    }
+    public static void Demo4(CleverSIDC sidc) {
+
+    }
+    public static void Demo5(CleverSIDC sidc) {
+
+    }
 }

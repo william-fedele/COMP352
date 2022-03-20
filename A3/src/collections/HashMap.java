@@ -68,4 +68,8 @@ public class HashMap {
         map[index].setValue("DEFUNCT");
         return temp;
     }
+
+    public int[] sort() {
+        return new int[0];
+    }
 }
