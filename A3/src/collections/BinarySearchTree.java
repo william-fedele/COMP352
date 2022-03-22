@@ -1,15 +1,15 @@
 package collections;
 
 
-public class BST {
+public class BinarySearchTree implements ADT {
 
     /**
      * Helper class to store data along with children.
      */
-    public static class Node {
+    public static class TreeNode {
         public Entry element;
-        public Node left;
-        public Node right;
+        public TreeNode left;
+        public TreeNode right;
 
         public int getKey() {return element.getKey();}
         public void setKey(int key) {element.setKey(key);}
@@ -17,7 +17,7 @@ public class BST {
         public void setValue(String value) {element.setValue(value);}
     }
 
-    public Node root;
+    public TreeNode root;
     private int size = 0;
 
     /**
@@ -26,37 +26,48 @@ public class BST {
      * @param value Data associated with the key
      * @return Node ready to use in the BST
      */
-    public Node createNode(int key, String value) {
-        Node n = new Node();
+    public TreeNode createNode(int key, String value) {
+        TreeNode n = new TreeNode();
         n.element = new Entry();
         n.setKey(key);
         n.setValue(value);
         return n;
     }
+    public TreeNode createNode(Entry entry) {
+        TreeNode n = new TreeNode();
+        n.element = entry;
+        return n;
+    }
 
     /**
-     * Insert a node into the BST
+     * Insert a node into the BST.
      * BST insertion chooses one path, left or right, at every node.
-     * Complexity: O(h) where h = logn often times, but h = n is possible depending on the data
+     * Complexity: O(h) where h = logn often times, but h = n is possible depending on the data.
      * @param key Identifier for an entry
-     * @param value
+     * @param value Data associated with the key
      */
-    public void insert(int key, String value) {
-        Node newNode = createNode(key, value);
-
+    @Override
+    public String insert(int key, String value) {
+        TreeNode newNode = createNode(key, value);
+        String oldValue = null;
         if(root == null) {
             root = newNode;
             size++;
-            return;
+            return null;
         }
-        Node curr = root;
-        Node prev = null;
+        TreeNode curr = root;
+        TreeNode prev = null;
 
         while(curr != null) {
             prev = curr;
 
-            if(key == curr.getKey())
-                return;
+            // Do nothing if they key is already present
+            if(key == curr.getKey()) {
+                oldValue = curr.getValue();
+                curr.setValue(value);
+                break;
+            }
+
             else if(key < curr.getKey())
                 curr = curr.left;
             else
@@ -69,17 +80,19 @@ public class BST {
             prev.right = newNode;
 
         size++;
+        return oldValue;
     }
 
     /**
      * Get the value for a given key
-     * Performs a binary search to find the location of the key in the BST
-     * Complexity: O(h) where h=logn often times, but h=n is possible depending on the data
-     * @param key
+     * Performs a binary search to find the location of the key in the BST.
+     * Complexity: O(h) where h=logn often times, but h=n is possible depending on the data.
+     * @param key Identifier for an entry
      * @return The string value associated with the key
      */
+    @Override
     public String get(int key) {
-        Node current = root;
+        TreeNode current = root;
         while(current != null) {
             if(key == current.getKey())
                 break;
@@ -104,13 +117,14 @@ public class BST {
      * @param key Identifier for an entry
      * @return The node being deleted
      */
-    public Node delete(int key) {
+    @Override
+    public String remove(int key) {
         // do nothing if tree is empty
         if(root == null)
             return null;
 
-        Node curr = root;
-        Node prev = null;
+        TreeNode curr = root;
+        TreeNode prev = null;
 
         // check if the key exists
         if(get(key) == null)
@@ -132,7 +146,7 @@ public class BST {
                 // deleting root
                 root = null;
             else {
-                // delete the parents connection to the element
+                // delete the parent's connection to the element
                 if(prev.left == curr)
                     prev.left = null;
                 else
@@ -142,7 +156,7 @@ public class BST {
         // element has one child
         else if(curr.left == null || curr.right == null) {
 
-            Node replaceNode = (curr.left == null ? curr.right : curr.left);
+            TreeNode replaceNode = (curr.left == null ? curr.right : curr.left);
             // deleting root. set the node itself
             if(curr == root)
                 root = replaceNode;
@@ -159,8 +173,8 @@ public class BST {
         else {
             // perform in order traversal to find the smallest number
             // to the right of the element to be deleted
-            Node successor = curr.right;
-            Node successorParent = null;
+            TreeNode successor = curr.right;
+            TreeNode successorParent = null;
 
             while(successor.left != null) {
                 successorParent = successor;
@@ -181,14 +195,14 @@ public class BST {
 
         }
         // return the deleted node if needed
-        return curr;
+        return curr.element.getValue();
     }
 
     /**
      * Helper function for an inorder traversal
      * @return All keys in a sorted array
      */
-    public int[] inorder() {
+    public int[] sort() {
         int[] sortedKeys = new int[size];
         inorder(root, sortedKeys, 0);
         return sortedKeys;
@@ -198,11 +212,11 @@ public class BST {
      * Perform inorder traversal recursively
      * Complexity: O(n). Every node must be visited.
      * @param node Initialized as root. Used for traversal
-     * @param sortedEntries Initialized as empty array. Accumulates keys sorted.
+     * @param sortedEntries Initialized as empty array. Accumulates the keys sorted.
      * @param index Tracks the next available index in the sorted key arrays.
      * @return Index used only within this function. Keeps track of next available index of the sorted array
      */
-    public int inorder(Node node, int[] sortedEntries, int index) {
+    public int inorder(TreeNode node, int[] sortedEntries, int index) {
         if (node == null) {return index;}
         index = inorder(node.left, sortedEntries, index);
         sortedEntries[index++] = node.getKey();
@@ -210,19 +224,13 @@ public class BST {
         return index;
     }
 
-    /**
-     * Clear the tree
-     */
-    public void clear() {
-        root = null;
-        size = 0;
-    }
 
     /**
      * Returns the current size of the tree
      * @return Current amount of entries in the BST
      */
-    public int getSize() {
+    @Override
+    public int size() {
         return size;
     }
 }

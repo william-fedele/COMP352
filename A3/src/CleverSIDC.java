@@ -1,17 +1,30 @@
-import collections.BST;
+import collections.BinarySearchTree;
 import collections.HashMap;
+
+import java.util.Objects;
+import java.util.Random;
 
 public class CleverSIDC {
 
-    private int sidc_threshold = 1000000;
+    private int sidc_threshold;
 
-    private BST bst = null;
-    private HashMap map = null;
+    private BinarySearchTree tree = null;
+    public HashMap map = null;
 
+    /**
+     * Default constructor
+     * At size 0, we start with a hashmap.
+     * Default threshold for transformation to BST is 1000
+     */
     public CleverSIDC() {
-        bst = new BST();
+        map = new HashMap();
+        sidc_threshold = 1000;
     }
 
+    /**
+     * Determines the threshold at which we transform the ADT
+     * @param size
+     */
     public void SetSIDCThreshold(int size) {
         sidc_threshold = size;
     }
@@ -21,7 +34,20 @@ public class CleverSIDC {
      * @return Random 8 digit key not already present in the ADT
      */
     public int generate() {
-        return 0;
+        Random random = new Random();
+        int key;
+        boolean exists;
+        do {
+            key = random.nextInt(99999999);
+            if(map != null) {
+                exists = (map.get(key) != null && !Objects.equals(map.get(key), "DEFUNCT"));
+            }
+            else
+                exists = tree.get(key) != null;
+
+        } while(exists);
+
+        return key;
     }
 
     /**
@@ -29,11 +55,11 @@ public class CleverSIDC {
      * @return All keys in a sorted array
      */
     public int[] allKeys() {
-        if(bst != null)
-            return bst.inorder();
+        if(tree != null)
+            return tree.sort();
         else
             // map stuff
-            return new int[0];
+            return map.sort();
     }
 
     /**
@@ -42,8 +68,16 @@ public class CleverSIDC {
      * @param value Data associated with the key
      */
     public void add(int key, String value) {
-        if(bst != null)
-            bst.insert(key, value);
+        if(map != null) {
+            if(map.size() + 1 > sidc_threshold) {
+                mapToTree();
+                tree.insert(key, value);
+            }
+            else
+                map.insert(key, value);
+        }
+        else
+            tree.insert(key, value);
     }
 
     /**
@@ -52,9 +86,14 @@ public class CleverSIDC {
      * @return Data associated with the key
      */
     public String remove(int key) {
-
-        if(bst != null)
-            return bst.delete(key).getValue();
+        if(tree != null) {
+            if(tree.size() - 1 <= sidc_threshold) {
+                treeToMap();
+                return map.remove(key);
+            }
+            else
+                return tree.remove(key);
+        }
         else
             return map.remove(key);
 
@@ -66,8 +105,8 @@ public class CleverSIDC {
      * @return Data associated with the key
      */
     public String getValues(int key) {
-        if(bst != null)
-            return bst.get(key);
+        if(tree != null)
+            return tree.get(key);
         else
             return map.get(key);
     }
@@ -78,7 +117,7 @@ public class CleverSIDC {
      * @return Next key in sorted sequence
      */
     public int nextKey(int key) {
-        int[] sortedKeys = bst != null ? bst.inorder() : map.sort();
+        int[] sortedKeys = tree != null ? tree.sort() : map.sort();
         int leftIndex = 0;
         int rightIndex = sortedKeys.length-1;
         int midIndex = (leftIndex+rightIndex / 2);
@@ -99,7 +138,7 @@ public class CleverSIDC {
      * @return Previous key in sorted sequence
      */
     public int prevKey(int key) {
-        int[] sortedKeys = bst != null ? bst.inorder() : map.sort();
+        int[] sortedKeys = tree != null ? tree.sort() : map.sort();
         int leftIndex = 0;
         int rightIndex = sortedKeys.length-1;
         int midIndex = (leftIndex+rightIndex / 2);
@@ -121,7 +160,7 @@ public class CleverSIDC {
      * @return Distance between the two keys
      */
     public int rangeKey(int key1, int key2) {
-        int[] sortedKeys = bst != null ? bst.inorder() : map.sort();
+        int[] sortedKeys = tree != null ? tree.sort() : map.sort();
         int first = -1;
         int last = -1;
         for (int i = 0; i < sortedKeys.length; i++) {
@@ -140,12 +179,37 @@ public class CleverSIDC {
 
     /**
      *
-     * @return Amount of entries currently in the ADT
      */
-    public int size() {
-        return bst.getSize();
+    private void mapToTree() {
+        tree = new BinarySearchTree();
+        for(int i = 0; i < map.getCapacity(); i++) {
+            if(map.at(i) != null && !Objects.equals(map.at(i).getValue(), "DEFUNCT"))
+                tree.insert(map.at(i).getKey(), map.at(i).getValue());
+        }
+        map = null;
     }
-    public void empty() {
-        bst.clear();
+
+    /**
+     *
+     */
+    private void treeToMap() {
+        map = new HashMap();
+        for(int i = 0; i < tree.size(); i++) {
+            map.insert(tree.root.getKey(), tree.root.getValue());
+            tree.remove(tree.root.getKey());
+        }
+        tree = null;
+    }
+
+    public void debug() {
+        System.out.println("=====================================");
+        if(map != null) {
+            System.out.println("Current mode: Map");
+            System.out.println("Size: " + map.size());
+        }
+        if(tree != null) {
+            System.out.println("Current mode: Tree");
+            System.out.println("Size: " + tree.size());
+        }
     }
 }

@@ -8,17 +8,16 @@ public class Entry {
     public int getKey() {
         return key;
     }
-
-    public void setKey(int key) {
+    public Entry setKey(int key) {
         this.key = key;
+        return this;
     }
-
     public String getValue() {
         return value;
     }
-
-    public void setValue(String value) {
+    public Entry setValue(String value) {
         this.value = value;
+        return this;
     }
 
 }
