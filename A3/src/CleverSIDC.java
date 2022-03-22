@@ -18,6 +18,7 @@ public class CleverSIDC {
      */
     public CleverSIDC() {
         map = new HashMap();
+        tree = null;
         sidc_threshold = 1000;
     }
 
@@ -181,6 +182,7 @@ public class CleverSIDC {
      *
      */
     private void mapToTree() {
+        System.out.println("Converting map to tree");
         tree = new BinarySearchTree();
         for(int i = 0; i < map.getCapacity(); i++) {
             if(map.at(i) != null && !Objects.equals(map.at(i).getValue(), "DEFUNCT"))
@@ -193,12 +195,26 @@ public class CleverSIDC {
      *
      */
     private void treeToMap() {
+        System.out.println("Converting tree to map");
         map = new HashMap();
         for(int i = 0; i < tree.size(); i++) {
             map.insert(tree.root.getKey(), tree.root.getValue());
             tree.remove(tree.root.getKey());
         }
         tree = null;
+    }
+
+    public int size() {
+        if(map != null)
+            return map.size();
+        else
+            return tree.size();
+    }
+
+    public void reset() {
+        map = new HashMap();
+        tree = null;
+
     }
 
     public void debug() {
