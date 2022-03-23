@@ -61,11 +61,11 @@ public class BinarySearchTree implements ADT {
         while(curr != null) {
             prev = curr;
 
-            // Do nothing if they key is already present
+            // Do nothing if the key is already present
             if(key == curr.getKey()) {
                 oldValue = curr.getValue();
                 curr.setValue(value);
-                break;
+                return oldValue;
             }
 
             else if(key < curr.getKey())
@@ -80,7 +80,7 @@ public class BinarySearchTree implements ADT {
             prev.right = newNode;
 
         size++;
-        return oldValue;
+        return null;
     }
 
     /**
@@ -223,7 +223,6 @@ public class BinarySearchTree implements ADT {
         index = inorder(node.right, sortedEntries, index);
         return index;
     }
-
 
     /**
      * Returns the current size of the tree

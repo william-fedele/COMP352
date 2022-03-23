@@ -121,8 +121,9 @@ public class CleverSIDC {
         int[] sortedKeys = tree != null ? tree.sort() : map.sort();
         int leftIndex = 0;
         int rightIndex = sortedKeys.length-1;
-        int midIndex = (leftIndex+rightIndex / 2);
+        int midIndex;
         while (leftIndex <= rightIndex) {
+            midIndex = (leftIndex+rightIndex) / 2;
             if(key == sortedKeys[midIndex])
                 return sortedKeys[midIndex+1];
             else if(key < sortedKeys[midIndex])
@@ -142,8 +143,9 @@ public class CleverSIDC {
         int[] sortedKeys = tree != null ? tree.sort() : map.sort();
         int leftIndex = 0;
         int rightIndex = sortedKeys.length-1;
-        int midIndex = (leftIndex+rightIndex / 2);
+        int midIndex;
         while (leftIndex <= rightIndex) {
+            midIndex = (leftIndex+rightIndex) / 2;
             if(key == sortedKeys[midIndex])
                 return sortedKeys[midIndex-1];
             else if(key < sortedKeys[midIndex])
