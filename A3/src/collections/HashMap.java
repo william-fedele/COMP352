@@ -62,6 +62,9 @@ public class HashMap implements ADT {
      */
     @Override
     public String insert(int key, String value) {
+        if(key < 0)
+            return null;
+
         Entry newEntry = new Entry().setKey(key).setValue(value);
         String oldValue = null;
         // initial index and offset hash values
@@ -73,7 +76,7 @@ public class HashMap implements ADT {
             if(map[index].getKey() == key) {
                 oldValue = map[index].getValue();
                 map[index].setValue(value);
-                break;
+                return oldValue;
             }
             index = (index + offset) % map.length;
         }
@@ -82,7 +85,7 @@ public class HashMap implements ADT {
         active_keys++;
         // Check if the map must be rehashed to maintain the load_factor
         rehash();
-        return oldValue;
+        return null;
     }
 
     /**
@@ -96,15 +99,14 @@ public class HashMap implements ADT {
         int index = hash(key);
         int offset = hash2(key);
 
-        String temp = null;
         // Probe the map, looking for the key or a null value
         // If a null value is found, stop searching. The value would've been placed there if it existed.
         while(map[index] != null) {
             if(map[index].getKey() == key)
-                temp = map[index].getValue();
+                return !Objects.equals(map[index].getValue(), "DEFUNCT") ? map[index].getValue() : null;
             index = (index + offset) % map.length;
         }
-        return temp;
+        return null;
     }
 
     /**
@@ -174,13 +176,63 @@ public class HashMap implements ADT {
      * @return Sorted array of keys
      */
     public int[] sort() {
-        // TODO
         int[] sortedKeys = new int[active_keys];
+        int pos = 0;
         for(int i = 0; i < map.length; i++) {
-            if(at(i) != null && !Objects.equals(at(i).getValue(), "DEFUNCT"))
-                sortedKeys[i] = at(i).getKey();
+            if(at(i) != null && !Objects.equals(at(i).getValue(), "DEFUNCT")) {
+                sortedKeys[pos++] = at(i).getKey();
+            }
         }
+        mergeSort(sortedKeys, 0, sortedKeys.length-1);
         return sortedKeys;
+    }
+
+    /**
+     * Performs a recursive merge sort to sort the keys.
+     * Sorts left and right halves recursively then merges each half to form the final sorted array.
+     * @param keys Array of integers to be sorted
+     * @param left Starting left index. Starts at 0.
+     * @param right Starting right index. Starts at keys.length -1
+     */
+    private void mergeSort(int[] keys, int left, int right) {
+        if (left < right) {
+            // Get the next mid-point to sort the next two halves
+            int mid = (left+right) / 2;
+            // Sort the left half
+            mergeSort(keys, left, mid);
+            // Sort the right half
+            mergeSort(keys, mid+1, right);
+            //
+            merge(keys, left, mid, right);
+        }
+    }
+
+    /**
+     * Merges two sub-arrays into a sorted single sub-array
+     * @param keys Full array of keys to be sorted
+     * @param left Left index of the sub-array
+     * @param mid Middle index of the sub-array
+     * @param right Right index of the sub-array
+     */
+    private void merge(int[] keys, int left, int mid, int right) {
+        // Temporary array to merge the two sub-arrays into
+        int[] temp = new int[right-left+1];
+        int i = left;
+        int j = mid+1;
+        int k = 0;
+
+        while(i <= mid && j <= right) {
+            if(keys[i] <= keys[j])
+                temp[k++] = keys[i++];
+            else
+                temp[k++] = keys[j++];
+        }
+        while(i <= mid)
+            temp[k++] = keys[i++];
+        while(j <= right)
+            temp[k++] = keys[j++];
+        for(i = left; i <= right; i++)
+            keys[i] = temp[i-left];
     }
 
     /**

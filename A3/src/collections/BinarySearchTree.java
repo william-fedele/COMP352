@@ -1,6 +1,8 @@
 package collections;
 
 
+import java.util.Objects;
+
 public class BinarySearchTree implements ADT {
 
     /**
@@ -48,6 +50,9 @@ public class BinarySearchTree implements ADT {
      */
     @Override
     public String insert(int key, String value) {
+        if(key < 0)
+            return null;
+
         TreeNode newNode = createNode(key, value);
         String oldValue = null;
         if(root == null) {
@@ -95,17 +100,14 @@ public class BinarySearchTree implements ADT {
         TreeNode current = root;
         while(current != null) {
             if(key == current.getKey())
-                break;
+                return current.getValue();
 
             if(key < current.getKey())
                 current = current.left;
             else
                 current = current.right;
         }
-        if(current == null)
-            return null;
-        else
-            return current.getValue();
+        return null;
     }
 
     /**
@@ -126,10 +128,6 @@ public class BinarySearchTree implements ADT {
         TreeNode curr = root;
         TreeNode prev = null;
 
-        // check if the key exists
-        if(get(key) == null)
-            return null;
-
         // get pointers to the keys location and parent
         while(curr != null && curr.getKey() != key){
             prev = curr;
@@ -138,6 +136,9 @@ public class BinarySearchTree implements ADT {
             else
                 curr = curr.right;
         }
+
+        if(curr == null)
+            return null;
 
         // element has no children, leaf node
         if(curr.left == null && curr.right == null) {
