@@ -1,5 +1,3 @@
-package collections;
-
 public class BinarySearchTree implements ADT {
 
     /**
@@ -30,11 +28,6 @@ public class BinarySearchTree implements ADT {
         n.element = new Entry();
         n.setKey(key);
         n.setValue(value);
-        return n;
-    }
-    public TreeNode createNode(Entry entry) {
-        TreeNode n = new TreeNode();
-        n.element = entry;
         return n;
     }
 
@@ -95,6 +88,7 @@ public class BinarySearchTree implements ADT {
     @Override
     public String get(int key) {
         TreeNode current = root;
+        // key is not found if null is reached
         while(current != null) {
             if(key == current.getKey())
                 return current.getValue();
@@ -134,10 +128,11 @@ public class BinarySearchTree implements ADT {
                 curr = curr.right;
         }
 
+        // the key wasn't found, do nothing.
         if(curr == null)
             return null;
 
-        // element has no children, leaf node
+        // element has no children (leaf node)
         if(curr.left == null && curr.right == null) {
 
             if(curr == root)
@@ -155,11 +150,13 @@ public class BinarySearchTree implements ADT {
         else if(curr.left == null || curr.right == null) {
 
             TreeNode replaceNode = (curr.left == null ? curr.right : curr.left);
-            // deleting root. set the node itself
+
             if(curr == root)
+                // deleting root. set the root to its only child
                 root = replaceNode;
             else {
-                // not root. replace deleted element with its only child.
+                // not deleting root.
+                // connect the only child to the parent.
                 if(prev.left == curr)
                     prev.left = replaceNode;
                 else
@@ -169,8 +166,7 @@ public class BinarySearchTree implements ADT {
         }
         // element has 2 children
         else {
-            // perform in order traversal to find the smallest number
-            // to the right of the element to be deleted
+            // perform in order traversal to find the smallest number to the right of the element to be deleted
             TreeNode successor = curr.right;
             TreeNode successorParent = null;
 
@@ -180,11 +176,11 @@ public class BinarySearchTree implements ADT {
             }
 
             // successor is to the immediate right
-            // attach delete element right tree to successor right tree
+            // attach deleted elements right tree to successor right tree
             if(successorParent == null)
                 curr.right = successor.right;
-            // successor has at least one node in between the deleted node
-            // replace the successor parents left node with the next highest node
+            // successor has at least one node between the deleted node
+            // replace the successor parents left node with the successors largest child
             else
                 successorParent.left = successor.right;
 
@@ -212,7 +208,7 @@ public class BinarySearchTree implements ADT {
      * @param node Initialized as root. Used for traversal
      * @param sortedEntries Initialized as empty array. Accumulates the keys sorted.
      * @param index Tracks the next available index in the sorted key arrays.
-     * @return Index used only within this function. Keeps track of next available index of the sorted array
+     * @return Index is only used within this function. It keeps track of next available index of the sorted array
      */
     public int inorder(TreeNode node, int[] sortedEntries, int index) {
         if (node == null) {return index;}

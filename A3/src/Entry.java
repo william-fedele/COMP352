@@ -1,5 +1,3 @@
-package collections;
-
 public class Entry {
 
     private int key;

@@ -1,18 +1,17 @@
-package collections;
-
 public class HashMap implements ADT {
 
     // load factor = active keys / total capacity. Maintain load factor < 0.75 to avoid many collisions
     private static final double DEFAULT_LOAD_FACTOR_THRESHOLD = 0.75;
-    // Storing prime map capacities to avoid runtime calculations
+    // Storing prime map capacities to avoid runtime prime calculations
     private static final int[] PRIME_CAPACITIES = new int[]{7, 19, 41, 83, 167, 331, 661, 1361};
     private static final int[] PRIME_PROBING = new int[]{5, 17, 37, 79, 163, 317, 659, 1327};
     private int current_prime_index = 0;
 
-
-    // map and metadata
+    // hashmap is an array of Entries which contain key/values
     private Entry[] map;
+    // active_keys keeps track of non-DEFUNCT keys
     private int active_keys;
+    // percentage of active_keys/capacity must be lower than load_factor to avoid collisions
     private double load_factor;
 
     /**
@@ -195,11 +194,10 @@ public class HashMap implements ADT {
         if (left < right) {
             // Get the next mid-point to sort the next two halves
             int mid = (left+right) / 2;
-            // Sort the left half
+            // split the array into two halves
             mergeSort(keys, left, mid);
-            // Sort the right half
             mergeSort(keys, mid+1, right);
-            //
+            // sort the two halves
             merge(keys, left, mid, right);
         }
     }
@@ -212,24 +210,30 @@ public class HashMap implements ADT {
      * @param right Right index of the sub-array
      */
     private void merge(int[] keys, int left, int mid, int right) {
-        // Temporary array to merge the two sub-arrays into
+        // temporary array to merge the two sub-arrays into
         int[] temp = new int[right-left+1];
-        int i = left;
-        int j = mid+1;
-        int k = 0;
+        // both used to manipulate left and mid but maintain the old values
+        int l = left;
+        int m = mid+1;
+        // used to track next index of temp array
+        int i = 0;
 
-        while(i <= mid && j <= right) {
-            if(keys[i] <= keys[j])
-                temp[k++] = keys[i++];
+        // compare and add the lower values for each sub-array until one is 'empty'
+        while(l <= mid && m <= right) {
+            if(keys[l] <= keys[m])
+                temp[i++] = keys[l++];
             else
-                temp[k++] = keys[j++];
+                temp[i++] = keys[m++];
         }
-        while(i <= mid)
-            temp[k++] = keys[i++];
-        while(j <= right)
-            temp[k++] = keys[j++];
-        for(i = left; i <= right; i++)
-            keys[i] = temp[i-left];
+        // left half has more values while right doesn't, add them all
+        while(l <= mid)
+            temp[i++] = keys[l++];
+        // right half has more values while left doesn't, add them all
+        while(m <= right)
+            temp[i++] = keys[m++];
+        // rewrite the sorted sub-array into the original array at the appropriate indexes
+        for(l = left; l <= right; l++)
+            keys[l] = temp[l-left];
     }
 
     /**

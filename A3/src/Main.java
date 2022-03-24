@@ -100,6 +100,7 @@ public class Main {
         cleversidc.add(55555555, "Melinda Gates");
 
         System.out.println("Range of keys between first and last SIDCs: " + cleversidc.rangeKey(11111111, 55555555));
+        System.out.println("Range of keys between last and first SIDCs: " + cleversidc.rangeKey(55555555, 11111111));
         System.out.println("Getting values for the last SIDC: " + cleversidc.getValues(55555555));
         System.out.println("Calling remove on the last SIDC: " + cleversidc.remove(55555555));
         System.out.println("Attempting to retrieve the deleted SIDC: " + cleversidc.getValues(55555555));

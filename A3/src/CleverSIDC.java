@@ -1,6 +1,3 @@
-import collections.BinarySearchTree;
-import collections.HashMap;
-
 import java.util.Random;
 
 public class CleverSIDC {
@@ -64,6 +61,7 @@ public class CleverSIDC {
      */
     public String add(int key, String value) {
         if(map != null) {
+            // transform to tree if we're about to cross the preset threshold
             if(map.size() + 1 > TRANSFORM_THRESHOLD) {
                 mapToTree();
                 return tree.insert(key, value);
@@ -82,6 +80,7 @@ public class CleverSIDC {
      */
     public String remove(int key) {
         if(tree != null) {
+            // transform to map if we're about to cross the preset threshold
             if(tree.size() - 1 <= TRANSFORM_THRESHOLD) {
                 treeToMap();
                 return map.remove(key);
@@ -136,6 +135,7 @@ public class CleverSIDC {
      * @return Previous key in sorted sequence
      */
     public int prevKey(int key) {
+        // get the sorted keys
         int[] sortedKeys = allKeys();
         int leftIndex = 0;
         int rightIndex = sortedKeys.length-1;
@@ -156,23 +156,29 @@ public class CleverSIDC {
      * Finds the distance between two keys in the sorted key array
      * @param key1 First identifier for an entry
      * @param key2 Second identifier for an entry
-     * @return Distance between the two keys
+     * @return Distance between the two keys. -1 if one or neither weren't found.
      */
     public int rangeKey(int key1, int key2) {
-        int[] sortedKeys = tree != null ? tree.sort() : map.sort();
+        // get the sorted keys
+        int[] sortedKeys = allKeys();
         int first = -1;
         int last = -1;
         for (int i = 0; i < sortedKeys.length; i++) {
+            // search for either key
             if(sortedKeys[i] == key1 || sortedKeys[i] == key2) {
+                // store first occurrence of either key
                 if(first == -1)
                     first = i;
                 else
+                    // first is already set, store the index of the further key
                     last = i;
             }
         }
-        if(first == last)
+        // if either are -1, one or both weren't found
+        if(first == -1 || last == -1)
             return -1;
         else
+            // return count of elements between the two indexes
             return (last-1) - first;
     }
 
@@ -183,6 +189,7 @@ public class CleverSIDC {
     private void mapToTree() {
         tree = new BinarySearchTree();
         for(int i = 0; i < map.getCapacity(); i++) {
+            // ignore all null indexes as well as previously deleted DEFUNCT values
             if(map.at(i) != null && map.at(i).getValue() != "DEFUNCT")
                 tree.insert(map.at(i).getKey(), map.at(i).getValue());
         }
@@ -222,6 +229,10 @@ public class CleverSIDC {
         tree = null;
     }
 
+    /**
+     * Returns the name of the current data structure.
+     * @return Either HashMap or BinarySearchTree, depending on the current data structure
+     */
     public String currentMode() {
         return map != null ? "HashMap" : "BinarySearchTree";
     }
