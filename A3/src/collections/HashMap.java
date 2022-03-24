@@ -1,8 +1,5 @@
 package collections;
 
-
-import java.util.Objects;
-
 public class HashMap implements ADT {
 
     // load factor = active keys / total capacity. Maintain load factor < 0.75 to avoid many collisions
@@ -72,7 +69,7 @@ public class HashMap implements ADT {
         int offset = hash2(key);
 
         // iterate through the map until an available index is found
-        while(map[index] != null && !Objects.equals(map[index].getValue(), "DEFUNCT")) {
+        while(map[index] != null && map[index].getValue() != "DEFUNCT") {
             if(map[index].getKey() == key) {
                 oldValue = map[index].getValue();
                 map[index].setValue(value);
@@ -103,7 +100,7 @@ public class HashMap implements ADT {
         // If a null value is found, stop searching. The value would've been placed there if it existed.
         while(map[index] != null) {
             if(map[index].getKey() == key)
-                return !Objects.equals(map[index].getValue(), "DEFUNCT") ? map[index].getValue() : null;
+                return map[index].getValue() != "DEFUNCT" ? map[index].getValue() : null;
             index = (index + offset) % map.length;
         }
         return null;
@@ -167,7 +164,7 @@ public class HashMap implements ADT {
 
         // Add every entry to the new map, excluding the DEFUNCT values
         for(Entry e : previousMap)
-            if(e != null && !Objects.equals(e.getValue(), "DEFUNCT"))
+            if(e != null && e.getValue() != "DEFUNCT")
                 insert(e.getKey(), e.getValue());
     }
 
@@ -179,7 +176,7 @@ public class HashMap implements ADT {
         int[] sortedKeys = new int[active_keys];
         int pos = 0;
         for(int i = 0; i < map.length; i++) {
-            if(at(i) != null && !Objects.equals(at(i).getValue(), "DEFUNCT")) {
+            if(at(i) != null && at(i).getValue() != "DEFUNCT") {
                 sortedKeys[pos++] = at(i).getKey();
             }
         }

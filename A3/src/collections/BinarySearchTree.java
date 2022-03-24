@@ -1,8 +1,5 @@
 package collections;
 
-
-import java.util.Objects;
-
 public class BinarySearchTree implements ADT {
 
     /**

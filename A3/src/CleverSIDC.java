@@ -1,8 +1,6 @@
-import collections.ADT;
 import collections.BinarySearchTree;
 import collections.HashMap;
 
-import java.util.Objects;
 import java.util.Random;
 
 public class CleverSIDC {
@@ -185,7 +183,7 @@ public class CleverSIDC {
     private void mapToTree() {
         tree = new BinarySearchTree();
         for(int i = 0; i < map.getCapacity(); i++) {
-            if(map.at(i) != null && !Objects.equals(map.at(i).getValue(), "DEFUNCT"))
+            if(map.at(i) != null && map.at(i).getValue() != "DEFUNCT")
                 tree.insert(map.at(i).getKey(), map.at(i).getValue());
         }
         map = null;
