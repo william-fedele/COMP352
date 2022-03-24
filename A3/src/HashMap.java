@@ -191,15 +191,17 @@ public class HashMap implements ADT {
      * @param right Starting right index. Starts at keys.length -1
      */
     private void mergeSort(int[] keys, int left, int right) {
-        if (left < right) {
-            // Get the next mid-point to sort the next two halves
-            int mid = (left+right) / 2;
-            // split the array into two halves
-            mergeSort(keys, left, mid);
-            mergeSort(keys, mid+1, right);
-            // sort the two halves
-            merge(keys, left, mid, right);
-        }
+        // nothing to do with a 0 length sub-array
+        if (left >= right)
+            return;
+
+        // Get the next mid-point to sort the next two halves
+        int mid = (left+right) / 2;
+        // split the array into two halves
+        mergeSort(keys, left, mid);
+        mergeSort(keys, mid+1, right);
+        // sort the two halves
+        merge(keys, left, mid, right);
     }
 
     /**

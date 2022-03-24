@@ -1,7 +1,7 @@
 public class BinarySearchTree implements ADT {
 
     /**
-     * Helper class to store data along with children.
+     * Helper class to store relevant student data along with the nodes children.
      */
     public static class TreeNode {
         public Entry element;
@@ -14,7 +14,9 @@ public class BinarySearchTree implements ADT {
         public void setValue(String value) {element.setValue(value);}
     }
 
+    // top node
     public TreeNode root;
+    // total amount of nodes in the tree
     private int size = 0;
 
     /**
@@ -40,11 +42,13 @@ public class BinarySearchTree implements ADT {
      */
     @Override
     public String insert(int key, String value) {
+        // SIDC keys are digit codes, not literally integers. shouldn't accept negative values.
         if(key < 0)
             return null;
 
         TreeNode newNode = createNode(key, value);
         String oldValue = null;
+        // if the tree is empty, root becomes the new node
         if(root == null) {
             root = newNode;
             size++;
@@ -53,6 +57,7 @@ public class BinarySearchTree implements ADT {
         TreeNode curr = root;
         TreeNode prev = null;
 
+        // when curr becomes null, prev becomes a parent to newNode
         while(curr != null) {
             prev = curr;
 
@@ -62,13 +67,14 @@ public class BinarySearchTree implements ADT {
                 curr.setValue(value);
                 return oldValue;
             }
-
+            // traverse left or right depending on the comparison between keys
             else if(key < curr.getKey())
                 curr = curr.left;
             else
                 curr = curr.right;
         }
-
+        // prev was found as the parent to the new key
+        // decide if it belongs on the left or right
         if(key < prev.element.getKey())
             prev.left = newNode;
         else
@@ -92,7 +98,7 @@ public class BinarySearchTree implements ADT {
         while(current != null) {
             if(key == current.getKey())
                 return current.getValue();
-
+            // traverse left or right depending on the comparison between keys
             if(key < current.getKey())
                 current = current.left;
             else
@@ -122,6 +128,7 @@ public class BinarySearchTree implements ADT {
         // get pointers to the keys location and parent
         while(curr != null && curr.getKey() != key){
             prev = curr;
+            // traverse left or right depending on the comparison between keys
             if(key < curr.getKey())
                 curr = curr.left;
             else

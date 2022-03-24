@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         CleverSIDC s = new CleverSIDC();
-        //readNASTAFiles(s);
+        readNASTAFiles(s);
         System.out.println("====================================================");
         Demo1(s);
         System.out.println("====================================================");
@@ -104,14 +104,14 @@ public class Main {
         System.out.println("Getting values for the last SIDC: " + cleversidc.getValues(55555555));
         System.out.println("Calling remove on the last SIDC: " + cleversidc.remove(55555555));
         System.out.println("Attempting to retrieve the deleted SIDC: " + cleversidc.getValues(55555555));
-        System.out.println("Getting the second key from the first: " + cleversidc.nextKey(11111111));
-        System.out.println("Getting the first key from the second: " + cleversidc.prevKey(22222222));
+        System.out.println("Getting the nextKey from the first key: " + cleversidc.nextKey(11111111));
+        System.out.println("Getting the prevKey from the second key: " + cleversidc.prevKey(22222222));
 
         cleversidc.reset();
     }
 
     /**
-     * Demonstrate printing all keys with random SIDCs
+     * Demonstrate allKeys with random SIDCs
      * @param cleversidc Instance of CleverSIDC class.
      */
     public static void Demo4(CleverSIDC cleversidc) {
@@ -124,7 +124,7 @@ public class Main {
     }
 
     /**
-     * Demonstrate adding a lot of random SIDCs, inserting an existing key to edit the value.
+     * Demonstrate adding many random SIDCs, inserting an existing key to edit the value.
      * @param cleversidc Instance of CleverSIDC class.
      */
     public static void Demo5(CleverSIDC cleversidc) {
@@ -133,10 +133,8 @@ public class Main {
         int first = cleversidc.generate();
         cleversidc.add(first, "John Smoth");
 
-        int last = 0;
         for(int i = 0; i < COUNT-1; i++) {
-            last = cleversidc.generate();
-            cleversidc.add(last, " ");
+            cleversidc.add(cleversidc.generate(), " ");
         }
 
         System.out.println(String.format("Current value for SIDC %d: %s", first, cleversidc.getValues(first)));
