@@ -60,6 +60,7 @@ public class Main {
         System.out.println("Removing the last generated key");
         cleversidc.remove(generated);
         System.out.println("Entry deleted. Current Size: " + cleversidc.size());
+
         cleversidc.reset();
     }
 
@@ -87,7 +88,7 @@ public class Main {
     }
 
     /**
-     *
+     * Demonstrating rangeKey, getValues before and after removal
      * @param cleversidc Instance of CleverSIDC class.
      */
     public static void Demo3(CleverSIDC cleversidc) {
@@ -102,13 +103,14 @@ public class Main {
         System.out.println("Getting values for the last SIDC: " + cleversidc.getValues(55555555));
         System.out.println("Calling remove on the last SIDC: " + cleversidc.remove(55555555));
         System.out.println("Attempting to retrieve the deleted SIDC: " + cleversidc.getValues(55555555));
-
+        System.out.println("Getting the second key from the first: " + cleversidc.nextKey(11111111));
+        System.out.println("Getting the first key from the second: " + cleversidc.prevKey(22222222));
 
         cleversidc.reset();
     }
 
     /**
-     *
+     * Demonstrate printing all keys with random SIDCs
      * @param cleversidc Instance of CleverSIDC class.
      */
     public static void Demo4(CleverSIDC cleversidc) {
@@ -121,7 +123,7 @@ public class Main {
     }
 
     /**
-     *
+     * Demonstrate adding a lot of random SIDCs, inserting an existing key to edit the value.
      * @param cleversidc Instance of CleverSIDC class.
      */
     public static void Demo5(CleverSIDC cleversidc) {

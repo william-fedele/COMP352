@@ -121,7 +121,7 @@ public class CleverSIDC {
         int midIndex;
         while (leftIndex <= rightIndex) {
             midIndex = (leftIndex+rightIndex) / 2;
-            if(key == sortedKeys[midIndex])
+            if(key == sortedKeys[midIndex] && midIndex+1 < sortedKeys.length)
                 return sortedKeys[midIndex+1];
             else if(key < sortedKeys[midIndex])
                 rightIndex = midIndex-1;
@@ -144,7 +144,7 @@ public class CleverSIDC {
         int midIndex;
         while (leftIndex <= rightIndex) {
             midIndex = (leftIndex+rightIndex) / 2;
-            if(key == sortedKeys[midIndex])
+            if(key == sortedKeys[midIndex] && midIndex-1 >= 0)
                 return sortedKeys[midIndex-1];
             else if(key < sortedKeys[midIndex])
                 rightIndex = midIndex-1;
